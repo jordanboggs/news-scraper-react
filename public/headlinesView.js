@@ -39,7 +39,7 @@ Vue.component('headline-list-item', {
     getNotes: function(id) {
       $.ajax({
         method: "GET",
-        url: "/headlines/" + id
+        url: "/headlines/grab/" + id
       })
       .then(function(data) {
         vm.notes = data[0].notes;
@@ -95,7 +95,7 @@ Vue.component('headline-note', {
 
       $.ajax({
         method: "POST",
-        url: "/headlines/" + id,
+        url: "/notes/post/" + id,
         data: noteData
       })
       .then(function(response) {
@@ -106,7 +106,7 @@ Vue.component('headline-note', {
     deleteNote: function(id) {
       $.ajax({
         method: "POST",
-        url: "/notes/" + id
+        url: "/notes/delete/" + id
       })
       .then(function() {
         vm.currentComponent = null;
@@ -123,7 +123,7 @@ const vm = new Vue({
     notes: []
   },
   mounted: function() {
-    $.getJSON('/headlines').done(function(data) {
+    $.getJSON('/headlines/populate').done(function(data) {
       vm.theHeadlines = data;
     });
   }

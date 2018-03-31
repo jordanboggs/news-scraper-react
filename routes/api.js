@@ -1,57 +1,31 @@
-// Require all models
-const db = require('../models');
-const scrape = require('../scripts/scrape');
+// Require controllers
+const Fetch = require('../controllers/fetch');
+const Headlines = require('../controllers/headline');
+const Notes = require('../controllers/note');
 
 module.exports = function(app) {
   // Scrape Polygon.com
   app.get("/scrape", function(req, res) {
-    scrape(req, res);
-    res.json("Scrape successful.");
+    Fetch(req,res);
   });
 
   // Populate page with Headlines
-  app.get("/headlines", function(req, res) {
-    db.Headline.find({}).sort({created_at: -1})
-    .then((dbHeadline) => res.json(dbHeadline))
-    .catch((err) => res.json(err));
+  app.get("/headlines/populate", function(req, res) {
+    Headlines.populateHeadlines(req, res);
   });
 
   // Route for grabbing specific Headline by id, populate with its note
-  app.get("/headlines/:id", function(req, res) {
-    db.Headline.find({
-      _id: req.params.id
-    })
-    .populate("notes")
-    .then((dbHeadline) => res.json(dbHeadline))
-    .catch((err) => res.json(err));
+  app.get("/headlines/grab/:id", function(req, res) {
+    Headlines.grabHeadline(req, res);
   });
 
   // Route for posting a Note associated with a Headline
-  app.post("/headlines/:id", function(req, res) {
-    db.Note.create(req.body)
-    .then(function(dbNote) {
-      return db.Headline.findOneAndUpdate({
-        _id: req.params.id,
-      }, {
-        $push: {
-          notes: dbNote._id
-        }
-      }, {
-        new: true
-      });
-    })
-    .then(function(dbHeadline) {
-      res.json(dbHeadline);
-    })
-    .catch((err) => res.json(err));
+  app.post("/notes/post/:id", function(req, res) {
+    Notes.postNote(req, res);
   });
 
   // Route for deleting a Note
-  app.post("/notes/:id", function(req, res) {
-    db.Note.deleteOne({
-      _id: req.params.id
-    })
-    .then((dbNotes) => res.json(dbNotes))
-    .catch((err) => res.json(err));
+  app.post("/notes/delete/:id", function(req, res) {
+    Notes.deleteNote(req, res);
   });
 };
