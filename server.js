@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const logger     = require('morgan');
 const mongoose   = require('mongoose');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Initialize express
 const app = express();
@@ -14,7 +14,7 @@ app.use(logger("dev"));
 // Use body-parser for handling for submissions
 app.use(bodyParser.urlencoded({ extended: true }));
 // Use express.static to serve public folder as static directory
-app.use(express.static("public"));
+app.use(express.static("client/build"));
 
 // Configure mongo for Heroku or dev environment
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraper";
