@@ -17,7 +17,9 @@ class Headlines extends Component {
   // Load headlines from databse
   loadHeadlines = () => {
     API.getHeadlines()
-    .then((res) => this.setState({ headlines: res.data }))
+    .then((res) => {
+      this.setState({ headlines: res.data });
+    })
     .catch((err) => console.error(err));
   }
 

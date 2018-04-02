@@ -1,15 +1,18 @@
 import React from "react";
 import { BrowserRouter as Router, 
          Route, 
-         Switch } from "react-router-dom";
+        //  Switch 
+        } from "react-router-dom";
 import Header from "./components/Header";
 import Headlines from "./pages/Headlines";
 
 const App = () => (
-  <div>
-    <Header />
-    <Headlines />
-  </div>
+  <Router>
+    <div>
+      <Header />
+      <Route exact path = "/" component = {Headlines} />
+    </div>
+  </Router>
 );
 
 export default App;
